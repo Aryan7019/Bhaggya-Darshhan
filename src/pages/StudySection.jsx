@@ -59,7 +59,7 @@ const StudySection = () => {
       <div className="min-h-screen py-20">
         <div className="container mx-auto px-4">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center mb-16">
-            <h1 className="text-5xl md:text-7xl font-bold text-white text-shadow mb-4">Study <span className="gradient-text">Ancient Wisdom</span></h1>
+            <h1 className="text-5xl md:text-7xl font-bold text-white text-shadow mb-4">Study <span className="text-black">Ancient Wisdom</span></h1>
             <p className="text-xl text-white max-w-3xl mx-auto">Discover the profound sciences of numerology and vaastu shastra that have guided humanity for millennia</p>
           </motion.div>
 

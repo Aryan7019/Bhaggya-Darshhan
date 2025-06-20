@@ -42,7 +42,7 @@ const Calculator = () => {
             className="text-center mb-16"
           >
             <h1 className="text-4xl md:text-6xl font-bold text-white text-shadow mb-4">
-              Numerology <span className="gradient-text">Calculator</span>
+              Numerology <span className="text-black">Calculator</span>
             </h1>
             <p className="text-xl text-white max-w-3xl mx-auto">
               Discover your life path, destiny, and soul purpose through the ancient science of numbers

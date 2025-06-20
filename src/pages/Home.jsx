@@ -121,7 +121,7 @@ const Home = () => {
         <section className="relative py-20 px-4 text-center">
           <div className="container mx-auto max-w-6xl">
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="space-y-8">
-              <h1 className="text-5xl md:text-7xl font-bold text-white text-shadow">Welcome to <span className="gradient-text">Bhaggya Darshhan</span></h1>
+              <h1 className="text-5xl md:text-7xl font-bold text-white text-shadow">Welcome to <span className="text-black">Bhaggya Darshhan</span></h1>
               <p className="text-xl md:text-2xl text-white max-w-3xl mx-auto">Unlock the secrets of your destiny through ancient numerology and vaastu wisdom</p>
               <div className="flex flex-wrap justify-center gap-4 mt-8">
                 <Button onClick={handleBookConsultation} className="orange-gradient text-white hover:orange-gradient-hover px-8 py-3 text-lg rounded-xl">Book Consultation</Button>
@@ -137,7 +137,7 @@ const Home = () => {
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              {[{ icon: Users, number: "5000+", label: "Happy Clients" }, { icon: Calendar, number: "15+", label: "Years Experience" }, { icon: Award, number: "98%", label: "Success Rate" }, { icon: TrendingUp, number: "24/7", label: "Support" }].map((stat, index) => (
+              {[{ icon: Users, number: "5000+", label: "Happy Clients" }, { icon: Calendar, number: "25+", label: "Years Experience" }, { icon: Award, number: "98%", label: "Success Rate" }, { icon: TrendingUp, number: "24/7", label: "Support" }].map((stat, index) => (
                 <motion.div key={index} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: index * 0.1 }} className="space-y-4">
                   <stat.icon className="h-12 w-12 text-orange-500 mx-auto" />
                   <div>
