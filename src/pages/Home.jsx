@@ -54,7 +54,7 @@ const Home = () => {
       setIsAuthModalOpen(true);
       return;
     }
-    sendConsultationRequest(user);
+    sendConsultationRequest();
     toast({
       title: "Consultation Request Sent!",
       description: "Thank you for your interest. Our team will contact you shortly to schedule your consultation.",

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { auth } from '@/components/firebase';
+import { auth, db } from '@/components/firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -7,6 +7,7 @@ import {
   onAuthStateChanged,
   updateProfile
 } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { toast } from '@/components/ui/use-toast';
 import { sendSignupNotification } from '@/services/emailService';
 
@@ -35,8 +36,16 @@ export const AuthProvider = ({ children }) => {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(result.user, { displayName: name });
 
-      // Optional: send email notification
-      sendSignupNotification({ name, email, phone });
+      // ✅ Store user data in Firestore
+      await setDoc(doc(db, 'users', result.user.uid), {
+        name,
+        email,
+        phone,
+        createdAt: new Date()
+      });
+
+      // ✅ Send email with name, email, and phone
+      await sendSignupNotification({ name, email, phone });
 
       toast({
         title: "Signed up!",
@@ -86,4 +95,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
 export default AuthProvider;

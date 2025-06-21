@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 
 const AuthModal = ({ isOpen, onClose }) => {
-  const [authMode, setAuthMode] = useState('login'); // 'login' or 'signup'
+  const [authMode, setAuthMode] = useState('login');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,22 +18,21 @@ const AuthModal = ({ isOpen, onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
   const { signup, login } = useAuth();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-  const success = authMode === 'signup'
-    ? await signup(formData)
-    : await login({ email: formData.email, password: formData.password });
+    const success = authMode === 'signup'
+      ? await signup(formData)
+      : await login({ email: formData.email, password: formData.password });
 
-  setIsLoading(false);
+    setIsLoading(false);
 
-  if (success) {
-    setFormData({ name: '', email: '', phone: '', password: '' });
-    onClose();
-  }
-};
-
+    if (success) {
+      setFormData({ name: '', email: '', phone: '', password: '' });
+      onClose();
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -59,7 +58,7 @@ const handleSubmit = async (e) => {
           className="fixed inset-0 bg-black bg-opacity-50"
           onClick={onClose}
         />
-        
+
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -77,14 +76,12 @@ const handleSubmit = async (e) => {
               <X className="h-5 w-5" />
             </button>
           </div>
-          
+
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             {authMode === 'signup' && (
               <>
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-sm font-medium text-gray-700">
-                    Full Name
-                  </Label>
+                  <Label htmlFor="name">Full Name</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
@@ -99,10 +96,9 @@ const handleSubmit = async (e) => {
                     />
                   </div>
                 </div>
+
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-sm font-medium text-gray-700">
-                    Mobile Number
-                  </Label>
+                  <Label htmlFor="phone">Mobile Number</Label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
@@ -121,11 +117,9 @@ const handleSubmit = async (e) => {
                 </div>
               </>
             )}
-            
+
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                Email Address
-              </Label>
+              <Label htmlFor="email">Email Address</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
@@ -165,7 +159,7 @@ const handleSubmit = async (e) => {
                 </button>
               </div>
             </div>
-            
+
             <Button
               type="submit"
               disabled={isLoading}
@@ -173,7 +167,7 @@ const handleSubmit = async (e) => {
             >
               {isLoading ? 'Processing...' : (authMode === 'login' ? 'Login' : 'Sign Up')}
             </Button>
-            
+
             <p className="text-sm text-gray-500 text-center">
               {authMode === 'login' ? "Don't have an account?" : "Already have an account?"}
               <button
