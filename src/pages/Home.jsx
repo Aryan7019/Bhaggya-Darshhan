@@ -37,6 +37,7 @@ const Home = () => {
           return {
             id: doc.id,
             ...data,
+            
           };
         });
         setReviews(reviewsData);
@@ -84,24 +85,23 @@ const Home = () => {
       });
     }
 
-    const review = {
+   const review = {
   name: user?.displayName || user?.email || "Anonymous",
   rating: newReview.rating,
   comment: newReview.comment,
   date: Timestamp.now(),
 };
 
-
-    try {
-      const docRef = await addDoc(collection(db, "reviews"), review);
-      setReviews([{ id: docRef.id, ...review, date: new Date() }, ...reviews]);
-      setNewReview({ rating: 5, comment: '' });
-      toast({ title: "Success!", description: "Your review has been submitted successfully" });
-    } catch (error) {
-      console.error("Error adding review: ", error);
-      toast({ title: "Error", description: "Failed to submit review", variant: "destructive" });
-    }
-  };
+try {
+  const docRef = await addDoc(collection(db, "reviews"), review);
+  setReviews([{ id: docRef.id, ...review, date: review.date.toDate() }, ...reviews]);
+  setNewReview({ rating: 5, comment: '' });
+  toast({ title: "Success!", description: "Your review has been submitted successfully" });
+} catch (error) {
+  console.error("Error adding review: ", error);
+  toast({ title: "Error", description: "Failed to submit review", variant: "destructive" });
+}
+   };
 
   const renderStars = (rating, interactive = false, onRatingChange = null) => (
     <div className="flex space-x-1">
@@ -234,7 +234,8 @@ const Home = () => {
                     <p className="text-gray-700 mb-4 italic">"{review.comment}"</p>
                     <div className="flex justify-between items-center text-sm text-gray-500">
                       <span className="font-medium">{review.name}</span>
-                      <span>{new Date(review.date).toLocaleDateString()}</span>
+<span>{(review.date?.toDate?.() || new Date(review.date)).toLocaleDateString()}</span>
+
                     </div>
                     {user && review.name === (user.displayName || user.email) && (
   <button
