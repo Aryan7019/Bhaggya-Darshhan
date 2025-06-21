@@ -9,6 +9,17 @@ import { toast } from '@/components/ui/use-toast';
 import AuthModal from '@/components/AuthModal';
 import { Link } from 'react-router-dom';
 import { sendConsultationRequest } from '@/services/emailService';
+import {
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  doc,
+  query,
+  orderBy,
+  Timestamp
+} from 'firebase/firestore';
+import { db } from "../components/firebase"; // adjust path to your firebase config
 
 const Home = () => {
   const [reviews, setReviews] = useState([]);
@@ -17,36 +28,24 @@ const Home = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    const savedReviews = localStorage.getItem('bhaggya_reviews');
-    if (savedReviews) {
-      setReviews(JSON.parse(savedReviews));
-    } else {
-      const defaultReviews = [
-        {
-          id: 1,
-          name: "Priya Sharma",
-          rating: 5,
-          comment: "Yashraj Gurujis's numerology reading was incredibly accurate! His insights helped me make important life decisions.",
-          date: "2024-01-15"
-        },
-        {
-          id: 2,
-          name: "Rajesh Kumar",
-          rating: 5,
-          comment: "Rishabh Goel's vaastu consultation transformed our home's energy. We've seen positive changes in our family's well-being.",
-          date: "2024-01-10"
-        },
-        {
-          id: 3,
-          name: "Anita Patel",
-          rating: 4,
-          comment: "Professional service and detailed analysis. The numerology calculator gave me valuable insights about my personality.",
-          date: "2024-01-05"
-        }
-      ];
-      setReviews(defaultReviews);
-      localStorage.setItem('bhaggya_reviews', JSON.stringify(defaultReviews));
-    }
+    const fetchReviews = async () => {
+      try {
+        const q = query(collection(db, "reviews"), orderBy("date", "desc"));
+        const querySnapshot = await getDocs(q);
+        const reviewsData = querySnapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            ...data,
+          };
+        });
+        setReviews(reviewsData);
+      } catch (error) {
+        console.error("Error fetching reviews: ", error);
+      }
+    };
+
+    fetchReviews();
   }, []);
 
   const handleBookConsultation = () => {
@@ -61,41 +60,47 @@ const Home = () => {
     });
   };
 
-  const handleDeleteReview = (id) => {
-    const filteredReviews = reviews.filter((r) => r.id !== id);
-    setReviews(filteredReviews);
-    localStorage.setItem('bhaggya_reviews', JSON.stringify(filteredReviews));
-    toast({ title: "Deleted", description: "Your review has been removed." });
+  const handleDeleteReview = async (id) => {
+    try {
+      await deleteDoc(doc(db, "reviews", id));
+      const filtered = reviews.filter(r => r.id !== id);
+      setReviews(filtered);
+      toast({ title: "Deleted", description: "Your review has been removed." });
+    } catch (error) {
+      console.error("Error deleting review: ", error);
+      toast({ title: "Error", description: "Could not delete review", variant: "destructive" });
+    }
   };
 
-  const handleSubmitReview = (e) => {
+  const handleSubmitReview = async (e) => {
     e.preventDefault();
-    if (!user) {
-      setIsAuthModalOpen(true);
-      return;
-    }
+    if (!user) return setIsAuthModalOpen(true);
+
     if (!newReview.comment.trim()) {
-      toast({
+      return toast({
         title: "Error",
         description: "Please write a comment for your review",
-        variant: "destructive"
+        variant: "destructive",
       });
-      return;
     }
 
     const review = {
-      id: Date.now(),
-      name: user.name,
-      rating: newReview.rating,
-      comment: newReview.comment,
-      date: new Date().toISOString().split('T')[0]
-    };
+  name: user?.displayName || user?.email || "Anonymous",
+  rating: newReview.rating,
+  comment: newReview.comment,
+  date: Timestamp.now(),
+};
 
-    const updatedReviews = [review, ...reviews];
-    setReviews(updatedReviews);
-    localStorage.setItem('bhaggya_reviews', JSON.stringify(updatedReviews));
-    setNewReview({ rating: 5, comment: '' });
-    toast({ title: "Success!", description: "Your review has been submitted successfully" });
+
+    try {
+      const docRef = await addDoc(collection(db, "reviews"), review);
+      setReviews([{ id: docRef.id, ...review, date: new Date() }, ...reviews]);
+      setNewReview({ rating: 5, comment: '' });
+      toast({ title: "Success!", description: "Your review has been submitted successfully" });
+    } catch (error) {
+      console.error("Error adding review: ", error);
+      toast({ title: "Error", description: "Failed to submit review", variant: "destructive" });
+    }
   };
 
   const renderStars = (rating, interactive = false, onRatingChange = null) => (
@@ -231,15 +236,16 @@ const Home = () => {
                       <span className="font-medium">{review.name}</span>
                       <span>{new Date(review.date).toLocaleDateString()}</span>
                     </div>
-                    {user && review.name === user.name && (
-                      <button
-                        onClick={() => handleDeleteReview(review.id)}
-                        className="absolute top-2 right-2 text-red-600 hover:text-red-800"
-                        aria-label="Delete review"
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </button>
-                    )}
+                    {user && review.name === (user.displayName || user.email) && (
+  <button
+    onClick={() => handleDeleteReview(review.id)}
+    className="absolute top-2 right-2 text-red-600 hover:text-red-800"
+    aria-label="Delete review"
+  >
+    <Trash2 className="h-5 w-5" />
+  </button>
+)}
+
                   </motion.div>
                 ))}
               </div>
