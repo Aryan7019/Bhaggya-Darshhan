@@ -18,23 +18,22 @@ const AuthModal = ({ isOpen, onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
   const { signup, login } = useAuth();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
 
-    let success = false;
-    if (authMode === 'signup') {
-      success = signup(formData);
-    } else {
-      success = login({ email: formData.email, password: formData.password });
-    }
+  const success = authMode === 'signup'
+    ? await signup(formData)
+    : await login({ email: formData.email, password: formData.password });
 
-    setIsLoading(false);
-    if (success) {
-      setFormData({ name: '', email: '', phone: '', password: '' });
-      onClose();
-    }
-  };
+  setIsLoading(false);
+
+  if (success) {
+    setFormData({ name: '', email: '', phone: '', password: '' });
+    onClose();
+  }
+};
+
 
   const handleChange = (e) => {
     setFormData({
