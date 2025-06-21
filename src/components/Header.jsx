@@ -56,7 +56,7 @@ const Header = () => {
             <div className="hidden md:flex items-center space-x-4">
               {user ? (
                 <div className="flex items-center space-x-4">
-                  <span className="text-gray-700">Welcome, {user.name}</span>
+                  <span className="text-gray-700">Welcome{user.displayName ? `, ${user.displayName}` : ''}</span>
                   <Button
                     onClick={logout}
                     variant="outline"
