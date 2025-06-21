@@ -26,14 +26,14 @@ const Home = () => {
           id: 1,
           name: "Priya Sharma",
           rating: 5,
-          comment: "Acharya Rajeev's numerology reading was incredibly accurate! His insights helped me make important life decisions.",
+          comment: "Yashraj Gurujis's numerology reading was incredibly accurate! His insights helped me make important life decisions.",
           date: "2024-01-15"
         },
         {
           id: 2,
           name: "Rajesh Kumar",
           rating: 5,
-          comment: "Smt. Meera's vaastu consultation transformed our home's energy. We've seen positive changes in our family's well-being.",
+          comment: "Rishabh Goel's vaastu consultation transformed our home's energy. We've seen positive changes in our family's well-being.",
           date: "2024-01-10"
         },
         {
@@ -161,7 +161,7 @@ const Home = () => {
               {/* Yashraj Guruji */}
 <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="bg-white rounded-2xl shadow-lg p-8 text-center card-shadow">
   <img alt="Yashraj Guruji - Numerology Expert" className="w-32 h-32 rounded-full mx-auto mb-6 object-cover" src="/images/Profile2.jpg" />
-  <h3 className="text-2xl font-bold gradient-text mb-2">Yashraj Guruju</h3>
+  <h3 className="text-2xl font-bold gradient-text mb-2">Yashraj Guruji</h3>
   <p className="text-orange-500 font-medium mb-2">Senior Numerology Consultant</p>
   <p className="text-gray-600 mb-4">With over 20 years of experience in numerology, Yashraj Guruji has helped thousands discover their life path through numbers.</p>
   <div className="space-y-2 text-sm text-gray-600 text-left mb-4">
